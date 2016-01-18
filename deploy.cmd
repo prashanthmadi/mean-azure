@@ -95,7 +95,7 @@ call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Clear Node Cache
-IF /I "%NPM_CLEAR_CACHE" EQ "1" (
+IF /I "%NPM_CLEAR_CACHE%" EQ "1" (
   echo Clearing NPM Cache
   call :ExecuteCmd !NPM_CMD! cache clear
   IF !ERRORLEVEL! NEQ 0 goto error
