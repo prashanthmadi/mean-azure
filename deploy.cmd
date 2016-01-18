@@ -90,7 +90,7 @@ echo Handling Config Setup
 call :SelectNodeVersion
 
 :: 2. Set NPM Cache to the Temp Directory
-echo Setting NPM Cache to %TEMP%\npm-cache with command !NPM_CMD! config set cache %TEMP%\npm-cache --global
+echo Setting NPM Cache to %TEMP%\npm-cache
 call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
 IF !ERRORLEVEL! NEQ 0 goto error
 
@@ -139,7 +139,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
   echo "Building web site using Gulp"
-  call :ExecuteCmd ".\node_modules\.bin\gulp.cmd" build
+  call :ExecuteCmd ""%DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd" build
   if !ERRORLEVEL! NEQ 0 goto error
   popd
 )
