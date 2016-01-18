@@ -85,11 +85,16 @@ goto :EOF
 :: Config Setup
 :ConfigSetup
 echo Handling Config Setup
-:: Set NPM Cache to the Temp Directory
+
+:: 1. Select node version
+call :SelectNodeVersion
+
+:: 2. Set NPM Cache to the Temp Directory
 echo Setting NPM Cache to %TEMP%\npm-cache with command !NPM_CMD! config set cache %TEMP%\npm-cache --global
 call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
 IF !ERRORLEVEL! NEQ 0 goto error
 
+:: 3. Clear Node Cache
 IF /I "%NPM_CLEAR_CACHE" EQ "1" (
   echo Clearing NPM Cache
   call :ExecuteCmd !NPM_CMD! cache clear
@@ -111,10 +116,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
-:: 2. Select node version
-call :SelectNodeVersion
-
-:: 3. Install npm packages
+:: 2. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd "%DEPLOYMENT_TARGET%"
   call :ExecuteCmd !NPM_CMD! install --msvs_version=2013
@@ -122,7 +124,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Install Bower
+:: 3. Install Bower
 IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
   echo "Running Bower Install"
@@ -133,7 +135,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   popd
 )
 
-:: 5. Build with Gulp
+:: 4. Build with Gulp
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
   echo "Building web site using Gulp"
@@ -142,7 +144,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   popd
 )
 
-:: 6. Clean-up
+:: 5. Clean-up
 call !NPM_CMD! prune --production
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
