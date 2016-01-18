@@ -47,7 +47,7 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
-goto Deployment
+goto ConfigSetup
 
 :: Utility Functions
 :: -----------------
@@ -82,6 +82,23 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
 goto :EOF
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Config Setup
+:ConfigSetup
+echo Handling Config Setup
+:: Set NPM Cache to the Temp Directory
+echo Setting NPM Cache to %TEMP%\npm-cache
+call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
+IF !ERRORLEVEL! NEQ 0 goto error
+
+IF /I "%NPM_CLEAR_CACHE" EQ "1" (
+  echo Clearing NPM Cache
+  call :ExecuteCmd !NPM_CMD! cache clear
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+goto Deployment
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
 
@@ -100,10 +117,33 @@ call :SelectNodeVersion
 :: 3. Install npm packages
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd !NPM_CMD! install
+  call :ExecuteCmd !NPM_CMD! install --msvs_version=2013
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
+
+:: 4. Install Bower
+IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
+  pushd "%DEPLOYMENT_TARGET%"
+  echo "Running Bower Install"
+  call !NPM_CMD! install bower
+  IF !ERRORLEVEL! NEQ 0 goto error
+  call :ExecuteCmd ".\node_modules\.bin\bower" install
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 5. Build with Gulp
+IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
+  pushd "%DEPLOYMENT_TARGET%"
+  echo "Building web site using Gulp"
+  call :ExecuteCmd ".\node_modules\.bin\gulp.cmd" build
+  if !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 6. Clean-up
+call !NPM_CMD! prune --production
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
