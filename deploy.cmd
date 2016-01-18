@@ -138,8 +138,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
 :: 4. Build with Gulp
 IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   pushd "%DEPLOYMENT_TARGET%"
-  echo "Building web site using Gulp"
-  call :ExecuteCmd ""%DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd" build
+  echo Building web site using Gulp
+  call :ExecuteCmd "%DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd" build
   if !ERRORLEVEL! NEQ 0 goto error
   popd
 )
