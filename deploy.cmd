@@ -86,7 +86,7 @@ goto :EOF
 :ConfigSetup
 echo Handling Config Setup
 :: Set NPM Cache to the Temp Directory
-echo Setting NPM Cache to %TEMP%\npm-cache
+echo Setting NPM Cache to %TEMP%\npm-cache with command !NPM_CMD! config set cache %TEMP%\npm-cache --global
 call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
 IF !ERRORLEVEL! NEQ 0 goto error
 
