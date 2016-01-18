@@ -19,7 +19,7 @@ IF %ERRORLEVEL% NEQ 0 (
 :: -----
 
 setlocal enabledelayedexpansion
-
+SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 SET ARTIFACTS=%~dp0%..\artifacts
 
 IF NOT DEFINED DEPLOYMENT_SOURCE (
