@@ -89,7 +89,7 @@ echo Handling Config Setup
 call :SelectNodeVersion
 
 :: 2. Set new MSBuild Path
-:: SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
+SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 
 :: 3. Set NPM Cache to the Temp Directory
 echo Setting NPM Cache to %TEMP%\npm_cache
