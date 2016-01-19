@@ -89,12 +89,12 @@ echo Handling Config Setup
 call :SelectNodeVersion
 
 :: 2. Set new MSBuild Path
-SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
+:: SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 
 :: 3. Set NPM Cache to the Temp Directory
-echo Setting NPM Cache to %TEMP%\npm-cache
-call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
-IF !ERRORLEVEL! NEQ 0 goto error
+:: echo Setting NPM Cache to %TEMP%\npm-cache
+:: call :ExecuteCmd !NPM_CMD! config set cache %TEMP%\npm-cache --global
+:: IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 4. Clear Node Cache
 IF /I "%NPM_CLEAR_CACHE%" EQU "1" (
