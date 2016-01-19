@@ -141,7 +141,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\Gulpfile.js" (
   echo "Running Gulp Install"
   call !NPM_CMD! install gulp
   echo Building web site using Gulp
-  call :ExecuteCmd "%DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd" build
+  echo Command: %DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd build
+  call :ExecuteCmd %DEPLOYMENT_TARGET%\node_modules\.bin\gulp.cmd build
   if !ERRORLEVEL! NEQ 0 goto error
   popd
 )
