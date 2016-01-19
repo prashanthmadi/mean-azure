@@ -10,6 +10,10 @@
     "type": "git",
     "url": "https://github.com/meanjs/mean.git"
   },
+  "engines": {
+    "node": "4.2.4",
+    "npm": ">=2.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "test": "grunt test"
